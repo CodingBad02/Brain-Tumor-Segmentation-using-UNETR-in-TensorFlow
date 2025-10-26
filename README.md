@@ -33,6 +33,45 @@ python train.py
 - The model will be trained for 500 epochs
 - Checkpoints will be saved in the `files/` directory
 - Training uses Dice loss and SGD optimizer
+- **GPU Support**: Automatically uses Apple Silicon GPU (Metal) if available
+- **TensorBoard logs** are saved in `logs/` directory
+
+### Monitoring Training
+
+#### 1. Check GPU Availability
+```bash
+python check_gpu.py
+```
+
+#### 2. Monitor with TensorBoard (Recommended)
+**Terminal 1 - Start TensorBoard:**
+```bash
+python start_tensorboard.py
+# Or manually: tensorboard --logdir=logs
+```
+Then open http://localhost:6006 in your browser to view:
+- **Graphs**: Model architecture visualization
+- **Scalars**: Loss and metrics over epochs
+- **Histograms**: Weight distributions
+- **Images**: Sample predictions (if enabled)
+
+**Terminal 2 - Start Training:**
+```bash
+source brainenv/bin/activate
+python train.py
+```
+
+#### 3. Resource Monitoring
+```bash
+# Simple terminal monitor
+python monitor_resources.py
+
+# Advanced monitoring with logging
+python monitor_training.py --pid <PID>
+
+# Built-in macOS monitoring
+top -o cpu -s 2
+```
 
 ### Testing the Model
 ```bash

@@ -8,3 +8,6 @@ brainenv
 #DS Store and pycache
 .DS_Store
 __pycache__
+
+#Ignore Files
+check_gpu.py

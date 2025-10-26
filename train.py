@@ -6,7 +6,7 @@ import cv2
 from glob import glob
 from sklearn.utils import shuffle
 import tensorflow as tf
-from tensorflow.keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPlateau, EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPlateau, EarlyStopping, TensorBoard
 from tensorflow.keras.optimizers import Adam, SGD
 from sklearn.model_selection import train_test_split
 from patchify import patchify
@@ -95,8 +95,20 @@ if __name__ == "__main__":
     np.random.seed(42)
     tf.random.set_seed(42)
 
+    """ Check GPU availability """
+    gpu_devices = tf.config.list_physical_devices('GPU')
+    if gpu_devices:
+        print(f"GPU Detected: {len(gpu_devices)} device(s)")
+        for gpu in gpu_devices:
+            print(f"  - {gpu}")
+        print("Training will use GPU")
+    else:
+        print("No GPU detected - Training will use CPU")
+    print("=" * 50)
+
     """ Directory for storing files """
     create_dir("files")
+    create_dir("logs")
 
     """ Hyperparameters """
     batch_size = 8
@@ -125,7 +137,8 @@ if __name__ == "__main__":
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
         ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, min_lr=1e-7, verbose=1),
         CSVLogger(csv_path),
-        EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=False)
+        EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=False),
+        TensorBoard(log_dir="logs", histogram_freq=1, write_graph=True, write_images=True)
     ]
 
     model.fit(
