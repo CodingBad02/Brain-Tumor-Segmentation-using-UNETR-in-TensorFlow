@@ -1,0 +1,6 @@
+tensorflow==2.13.0
+opencv-python
+patchify
+numpy>=1.22.0,<1.25.0
+scikit-learn
+tqdm

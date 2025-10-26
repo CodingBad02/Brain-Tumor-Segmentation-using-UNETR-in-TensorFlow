@@ -106,7 +106,7 @@ if __name__ == "__main__":
     csv_path = os.path.join("files", "log.csv")
 
     """ Dataset """
-    dataset_path = "brain-tumor-segmentation"
+    dataset_path = "BraTS_data"
     (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset(dataset_path)
 
     print(f"Train: \t{len(train_x)} - {len(train_y)}")

@@ -1,0 +1,10 @@
+#Data Files
+BraTS_data
+
+#Venv
+venv
+brainenv
+
+#DS Store and pycache
+.DS_Store
+__pycache__

@@ -1,5 +1,46 @@
 # Brain-Tumor-Segmentation-using-UNETR-in-TensorFlow
-This repository demonstrates the utilization of UNETR for brain tumor segmentation.
+This repository demonstrates the utilization of UNETR (Vision Transformer) for brain tumor segmentation using TensorFlow.
+
+## Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/Brain-Tumor-Segmentation-using-UNETR-in-TensorFlow.git
+cd Brain-Tumor-Segmentation-using-UNETR-in-TensorFlow
+```
+
+### 2. Create Virtual Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Dataset
+The dataset contains 3064 pairs of MRI brain images and their respective binary mask indicating tumor.
+The dataset is already included in the `BraTS_data/` directory.
+
+## Usage
+
+### Training the Model
+```bash
+python train.py
+```
+- The model will be trained for 500 epochs
+- Checkpoints will be saved in the `files/` directory
+- Training uses Dice loss and SGD optimizer
+
+### Testing the Model
+```bash
+python test.py
+```
+- Loads the trained model and generates predictions
+- Results are saved in the `results/` directory
+- Each result shows: Input Image → Ground Truth → Prediction
 
 ## Architecture
 
