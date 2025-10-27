@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 from tqdm import tqdm
 import tensorflow as tf
+from tensorflow.keras.optimizers import Adam
 from patchify import patchify
 from train import load_dataset, create_dir
 from metrics import dice_loss, dice_coef
@@ -160,7 +161,33 @@ if __name__ == "__main__":
 
     """ Load the model """
     print(f"Loading model from: {args.model}")
-    model = tf.keras.models.load_model(args.model, custom_objects={"dice_loss": dice_loss, "dice_coef": dice_coef})
+
+    # Try loading with different approaches for compatibility
+    try:
+        # First try with compile=False to avoid compilation issues
+        model = tf.keras.models.load_model(args.model, compile=False)
+        # Then compile with the custom objects
+        model.compile(optimizer=Adam(learning_rate=1e-4),
+                     loss=dice_loss,
+                     metrics=[dice_coef])
+        print("✓ Model loaded successfully with compile=False")
+    except Exception as e:
+        print(f"Failed with compile=False: {e}")
+        try:
+            # Try with custom_objects
+            model = tf.keras.models.load_model(args.model, custom_objects={"dice_loss": dice_loss, "dice_coef": dice_coef})
+            print("✓ Model loaded successfully with custom_objects")
+        except Exception as e2:
+            print(f"Failed with custom_objects: {e2}")
+            # Try with a dictionary that includes the function names
+            custom_objects = {
+                "dice_loss": dice_loss,
+                "dice_coef": dice_coef,
+                tf.keras.losses.BinaryCrossentropy.__name__: tf.keras.losses.BinaryCrossentropy,
+                tf.keras.metrics.BinaryAccuracy.__name__: tf.keras.metrics.BinaryAccuracy
+            }
+            model = tf.keras.models.load_model(args.model, custom_objects=custom_objects)
+            print("✓ Model loaded successfully with extended custom_objects")
 
     """ Initialize Grad-CAM if requested """
     gradcam = None
