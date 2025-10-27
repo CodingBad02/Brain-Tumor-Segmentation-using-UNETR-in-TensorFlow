@@ -11,3 +11,12 @@ __pycache__
 
 #Ignore Files
 check_gpu.py
+
+#Logs
+logs/
+
+#Model Files:
+files/
+
+#Pending Tasks Files:
+tasks/

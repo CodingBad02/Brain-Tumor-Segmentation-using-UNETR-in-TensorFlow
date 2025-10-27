@@ -4,3 +4,5 @@ patchify
 numpy>=1.22.0,<1.25.0
 scikit-learn
 tqdm
+matplotlib>=3.5.0
+PyYAML>=6.0

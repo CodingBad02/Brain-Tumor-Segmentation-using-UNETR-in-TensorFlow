@@ -81,6 +81,58 @@ python test.py
 - Results are saved in the `results/` directory
 - Each result shows: Input Image → Ground Truth → Prediction
 
+### Explainability with Grad-CAM
+
+The repository now includes **Grad-CAM (Gradient-weighted Class Activation Mapping)** for model explainability, allowing you to visualize which regions of the input image contribute most to the tumor segmentation decisions.
+
+#### Basic Usage with Grad-CAM
+```bash
+# Generate Grad-CAM for 10 test samples
+python test.py --gradcam --gradcam-samples 10
+
+# Use specific target layers
+python test.py --gradcam --gradcam-layer conv_block_7 conv_block_6
+
+# Customize visualization
+python test.py --gradcam --gradcam-alpha 0.5 --gradcam-colormap hot
+
+# Process all test samples with Grad-CAM
+python test.py --gradcam --gradcam-samples 0
+```
+
+
+#### Grad-CAM Features
+- **Automatic Layer Detection**: Automatically identifies optimal convolutional layers for Grad-CAM
+- **Multi-layer Aggregation**: Combines features from multiple decoder layers for comprehensive visualization
+- **Flexible Visualization**: Customizable colormaps, transparency, and output formats
+- **Comprehensive Reports**: HTML reports with visual summaries
+- **Metric Calculation**: Optional computation of evaluation metrics
+
+#### Grad-CAM Output Structure
+```
+results/gradcam/
+├── case_001_original.png          # Original input image
+├── case_001_heatmap.png           # Grad-CAM heatmap
+├── case_001_overlay.png           # Heatmap overlay on image
+├── case_001_prediction.png        # Model prediction
+├── case_001_ground_truth.png      # Ground truth mask
+├── case_001_comparison.png        # Side-by-side comparison
+├── case_001_metadata.json         # Processing metadata and metrics
+└── gradcam_report.html            # HTML report summary
+```
+
+#### Recommended Target Layers
+The implementation automatically detects suitable layers, but you can specify custom targets:
+- **`conv_block_7`**: Final decoder layer (highest spatial resolution)
+- **`conv_block_6`**: Mid-level decoder features
+- **`conv_block_5`**: Higher-level semantic features
+
+#### Troubleshooting Grad-CAM
+- **No layers found**: Ensure your model has convolutional layers with appropriate names
+- **Blank heatmaps**: Try different target layers or check model training quality
+- **Memory issues**: Reduce batch size or number of parallel workers
+- **Slow processing**: Use fewer target layers or reduce number of samples
+
 ## Architecture
 
 | ![The block diagram of the Original UNETR model.](figures/unetr_architecture.png) |
